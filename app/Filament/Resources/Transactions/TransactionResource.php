@@ -53,6 +53,6 @@ class TransactionResource extends Resource
     #[Override]
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', filament()->auth()->id());
+        return parent::getEloquentQuery();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\MoneyCast;
+use App\Models\Traits\BelongsToUser;
 use Database\Factories\BankAccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,8 @@ use Override;
 
 class BankAccount extends Model
 {
+    use BelongsToUser;
+
     /** @use HasFactory<BankAccountFactory> */
     use HasFactory;
 

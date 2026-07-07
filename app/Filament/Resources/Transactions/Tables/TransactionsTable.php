@@ -22,11 +22,11 @@ class TransactionsTable
                     ->date()
                     ->sortable(),
                 TextColumn::make('amount')
-                    ->money('PHP')
+                    ->money(filament()->auth()->user()->currency)
                     ->sortable()
                     ->badge()
-                    ->color(fn ($state): string => $state >= 0 ? 'success' : 'danger')
-                    ->icon(fn ($state): string => $state >= 0 ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down'),
+                    ->color(fn($state): string => $state >= 0 ? 'success' : 'danger')
+                    ->icon(fn($state): string => $state >= 0 ? 'heroicon-o-arrow-up' : 'heroicon-o-arrow-down'),
                 TextColumn::make('description')
                     ->searchable(),
                 TextColumn::make('bankAccount.name')
@@ -46,11 +46,11 @@ class TransactionsTable
                         return $query
                             ->when(
                                 $data['value'] === TransactionType::Income->value,
-                                fn (Builder $query): Builder => $query->where('amount', '>=', 0),
+                                fn(Builder $query): Builder => $query->where('amount', '>=', 0),
                             )
                             ->when(
                                 $data['value'] === TransactionType::Expense->value,
-                                fn (Builder $query): Builder => $query->where('amount', '<', 0),
+                                fn(Builder $query): Builder => $query->where('amount', '<', 0),
                             );
                     }),
             ])

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\TransactionType;
+use App\Models\Traits\BelongsToUser;
 use Database\Factories\TransactionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,8 @@ use Override;
 
 class Transaction extends Model
 {
+    use BelongsToUser;
+
     /** @use HasFactory<TransactionFactory> */
     use HasFactory;
 

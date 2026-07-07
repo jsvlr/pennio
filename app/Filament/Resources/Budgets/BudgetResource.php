@@ -55,13 +55,13 @@ class BudgetResource extends Resource
                     ->searchable(),
 
                 TextColumn::make('amount')
-                    ->money('PHP')
+                    ->money(filament()->auth()->user()->currency)
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('type')
                     ->badge()
-                    ->color(fn (BudgetType $state): string => match ($state) {
+                    ->color(fn(BudgetType $state): string => match ($state) {
                         BudgetType::Reset => 'success',
                         BudgetType::Rollover => 'warning'
                     }),
@@ -91,6 +91,6 @@ class BudgetResource extends Resource
     #[Override]
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', filament()->auth()->id());
+        return parent::getEloquentQuery();
     }
 }

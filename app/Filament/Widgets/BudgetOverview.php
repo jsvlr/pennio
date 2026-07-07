@@ -21,7 +21,6 @@ class BudgetOverview extends StatsOverviewWidget
         $end_date = $end_date ? Carbon::parse($end_date) : now();
 
         $budgets = Budget::query()
-            ->where('user_id', filament()->auth()->id())
             ->with(['transactions' => function ($query) use ($start_date, $end_date) {
                 $query->whereDate('date', '>=', $start_date)
                     ->whereDate('date', '<=', $end_date);
@@ -82,7 +81,6 @@ class BudgetOverview extends StatsOverviewWidget
         return 'success';
     }
 
-
     private function getIconPercentage(float $percentage): string
     {
 
@@ -133,7 +131,6 @@ class BudgetOverview extends StatsOverviewWidget
             return 0;
         }
 
-
         $previous_start_date = $created_at->copy()->startOfMonth();
         $previous_end_date = $start_of_period->copy()->subDay();
 
@@ -154,10 +151,9 @@ class BudgetOverview extends StatsOverviewWidget
     private function calculateSpent(Budget $budget): float
     {
         return $budget->transactions
-            ->filter(fn($transaction) => $transaction->amount < 0)
-            ->sum(fn($transaction) => abs($transaction->amount));
+            ->filter(fn ($transaction) => $transaction->amount < 0)
+            ->sum(fn ($transaction) => abs($transaction->amount));
     }
-
 
     private function calculateBudgetAmount(Budget $budget, Carbon $start_date, Carbon $end_date): float
     {

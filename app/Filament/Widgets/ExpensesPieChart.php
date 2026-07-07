@@ -8,9 +8,10 @@ use Filament\Widgets\ChartWidget;
 class ExpensesPieChart extends ChartWidget
 {
     protected ?string $heading = 'Expenses by Category';
-    protected bool $isCollapsible = true;
-    protected ?string $description = 'Expenses Pie Chart Description';
 
+    protected bool $isCollapsible = true;
+
+    protected ?string $description = 'Expenses Pie Chart Description';
 
     protected function getData(): array
     {
@@ -21,11 +22,11 @@ class ExpensesPieChart extends ChartWidget
             ->with('category')
             ->where('amount', '<', 0)
             ->whereNotNull('category_id')
-            ->when($start_date, fn($query) => $query->whereDate('date', '>=', $start_date))
-            ->when($end_date, fn($query) => $query->whereDate('date', '<=', $end_date))
+            ->when($start_date, fn ($query) => $query->whereDate('date', '>=', $start_date))
+            ->when($end_date, fn ($query) => $query->whereDate('date', '<=', $end_date))
             ->get()
             ->groupBy('category.name')
-            ->map(fn($transactions) => abs($transactions->sum('amount')));
+            ->map(fn ($transactions) => abs($transactions->sum('amount')));
 
         return [
             'datasets' => [

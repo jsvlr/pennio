@@ -15,8 +15,6 @@ use Override;
 
 class StatsOverview extends StatsOverviewWidget
 {
-
-
     use InteractsWithPageFilters;
 
     #[Override]
@@ -28,6 +26,7 @@ class StatsOverview extends StatsOverviewWidget
             'xl' => 3,
         ];
     }
+
     protected function getStats(): array
     {
 
@@ -36,15 +35,15 @@ class StatsOverview extends StatsOverviewWidget
 
         $user = filament()->auth()->user();
 
-        $accounts = BankAccount::select('id', 'name', 'balance')->where('user_id', filament()->auth()->id())->get();
+        $accounts = BankAccount::select('id', 'name', 'balance')->get();
         $transactions = Transaction::query()
-            ->when($start_date, fn($query) => $query->whereDate('date', '>=', $start_date))
-            ->when($end_date, fn($query) => $query->whereDate('date', '<=', $end_date))
+            ->when($start_date, fn ($query) => $query->whereDate('date', '>=', $start_date))
+            ->when($end_date, fn ($query) => $query->whereDate('date', '<=', $end_date))
             ->get();
 
         $total_balance = Number::currency($this->calculateTotalBalance($accounts), $user->currency, $user->locale);
         $total_expenses = Number::currency(self::calculateExpenses($transactions), $user->currency, $user->locale);
-        $total_income =  Number::currency(self::calculateIncomes($transactions), $user->currency, $user->locale);
+        $total_income = Number::currency(self::calculateIncomes($transactions), $user->currency, $user->locale);
         $total_cash_flow = Number::currency(self::calculateCashFlow($transactions), $user->currency, $user->locale);
         $stats = [];
 
@@ -90,6 +89,7 @@ class StatsOverview extends StatsOverviewWidget
         foreach ($accounts as $account) {
             $total_balance += $account->balance;
         }
+
         return $total_balance;
     }
 
@@ -113,6 +113,7 @@ class StatsOverview extends StatsOverviewWidget
                 $total_incomes = $income->amount;
             }
         }
+
         return $total_incomes;
     }
 

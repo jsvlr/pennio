@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\BudgetType;
+use App\Models\Traits\BelongsToUser;
 use Database\Factories\BudgetFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,8 @@ use Override;
 
 class Budget extends Model
 {
+    use BelongsToUser;
+
     /** @use HasFactory<BudgetFactory> */
     use HasFactory;
 

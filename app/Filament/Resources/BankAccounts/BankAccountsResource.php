@@ -51,7 +51,7 @@ class BankAccountsResource extends Resource
 
                 TextColumn::make('balance')
                     ->sortable()
-                    ->money('PHP'),
+                    ->money(filament()->auth()->user()->currency),
 
             ])
             ->filters([
@@ -78,6 +78,6 @@ class BankAccountsResource extends Resource
     #[Override]
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', filament()->auth()->id());
+        return parent::getEloquentQuery();
     }
 }

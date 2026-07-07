@@ -24,10 +24,10 @@ class TransactionFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'bank_account_id' => fn(array $attributes) => BankAccount::factory()->state(['user_id' => $attributes['user_id']]),
+            'bank_account_id' => fn (array $attributes) => BankAccount::factory()->state(['user_id' => $attributes['user_id']]),
             'description' => fake()->sentence(3),
-            'category_id' => fn(array $attributes) => Category::factory()->state(['user_id' => $attributes['user_id']]),
-            'budget_id' => fn(array $attributes) => Budget::factory()->state(['user_id' => $attributes['user_id']]),
+            'category_id' => fn (array $attributes) => Category::factory()->state(['user_id' => $attributes['user_id']]),
+            'budget_id' => fn (array $attributes) => Budget::factory()->state(['user_id' => $attributes['user_id']]),
             'note' => fake()->sentence(5),
             'amount' => fake()->numberBetween(9999, 9999),
             'date' => fake()->dateTimeBetween('-1 year', 'now'),

@@ -58,21 +58,18 @@ class TransactionForm
                 Select::make('bank_account_id')
                     ->relationship(
                         'bankAccount',
-                        'name',
-                        fn ($query) => $query->where('user_id', filament()->auth()->id())
+                        'name'
                     ),
 
                 Select::make('category_id')
                     ->relationship(
                         'category',
-                        'name',
-                        fn ($query) => $query->where('user_id', filament()->auth()->id())
+                        'name'
                     ),
                 Select::make('budget_id')
                     ->relationship(
                         'budget',
-                        'name',
-                        fn ($query) => $query->where('user_id', filament()->auth()->id())
+                        'name'
                     ),
 
                 Textarea::make('note')
