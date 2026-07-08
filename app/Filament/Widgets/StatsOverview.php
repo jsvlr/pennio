@@ -23,7 +23,7 @@ class StatsOverview extends StatsOverviewWidget
         return [
             'sm' => 1,
             'md' => 2,
-            'xl' => 3,
+            'xl' => 4,
         ];
     }
 
@@ -37,8 +37,8 @@ class StatsOverview extends StatsOverviewWidget
 
         $accounts = BankAccount::select('id', 'name', 'balance')->get();
         $transactions = Transaction::query()
-            ->when($start_date, fn ($query) => $query->whereDate('date', '>=', $start_date))
-            ->when($end_date, fn ($query) => $query->whereDate('date', '<=', $end_date))
+            ->when($start_date, fn($query) => $query->whereDate('date', '>=', $start_date))
+            ->when($end_date, fn($query) => $query->whereDate('date', '<=', $end_date))
             ->get();
 
         $total_balance = Number::currency($this->calculateTotalBalance($accounts), $user->currency, $user->locale);
@@ -47,9 +47,7 @@ class StatsOverview extends StatsOverviewWidget
         $total_cash_flow = Number::currency(self::calculateCashFlow($transactions), $user->currency, $user->locale);
         $stats = [];
 
-        foreach ($accounts as $account) {
-            $stats[] = Stat::make($account->name, Number::currency($account->balance, $user->currency, $user->locale));
-        }
+
 
         $stats[] = Stat::make('Total Balance', $total_balance)
             ->description('Current account balance')
@@ -80,6 +78,9 @@ class StatsOverview extends StatsOverviewWidget
             ->color($total_cash_flow >= 0 ? 'success' : 'danger')
             ->icon(Heroicon::OutlinedScale);
 
+        foreach ($accounts as $account) {
+            $stats[] = Stat::make($account->name, Number::currency($account->balance, $user->currency, $user->locale));
+        }
         return $stats;
     }
 

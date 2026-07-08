@@ -18,6 +18,8 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Pages\Auth\UserProfile;
+use Illuminate\Support\Facades\Storage;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -27,10 +29,18 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('Pinnio')
+            ->brandLogo(Storage::url('images/brandLogo/primary.svg'))
+            ->darkModeBrandLogo(Storage::url('images/brandLogo/dark.svg'))
+            ->favicon(Storage::url('images/favicon/favicon.ico'))
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
+            ->profile(
+                page: UserProfile::class,
+                isSimple: false,
+            )
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Red,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
