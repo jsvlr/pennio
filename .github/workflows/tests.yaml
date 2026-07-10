@@ -1,4 +1,4 @@
-name: Pinnio Test
+name: Run tests
 
 on:
   push:
