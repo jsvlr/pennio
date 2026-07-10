@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('locale')->nullable()->default('en')->after('currency');
+            $table->renameColumn('app_authenticated_secret', 'app_authentication_secret');
         });
     }
 
     /**
      * Reverse the migrations.
-   
+    
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('locale');
+            //
         });
-    }
+    } 
      */
 };

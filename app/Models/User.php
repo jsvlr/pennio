@@ -12,14 +12,35 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\HasAvatar;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthenticationRecovery;
+use Filament\Auth\MultiFactor\Email\Contracts\HasEmailAuthentication;
+use Filament\Auth\MultiFactor\Email\Concerns\InteractsWithEmailAuthentication;
 use Override;
 
-#[Fillable(['name', 'email', 'password', 'currency', 'locale'])]
+#[Fillable([
+    'name',
+    'email',
+    'password',
+    'currency',
+    'locale',
+    'avatar',
+    'has_email_authentication'
+])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar, HasAppAuthentication, HasAppAuthenticationRecovery, HasEmailAuthentication, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory,
+        Notifiable,
+        InteractsWithAppAuthentication,
+        InteractsWithEmailAuthentication,
+        InteractsWithAppAuthenticationRecovery;
 
     /**
      * Get the attributes that should be cast.
@@ -31,6 +52,7 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'has_email_authentication' => 'boolean'
         ];
     }
 
@@ -58,5 +80,24 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    public function hasEmailAuthentication(): bool
+    {
+        return $this->has_email_authentication;
+    }
+
+    public function toggleEmailAuthentication(bool $condition): void
+    {
+        $this->has_email_authentication = $condition;
+        $this->save();
+    }
+
+    #[Override]
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar
+            ? Storage::url($this->avatar)
+            : null;
     }
 }
